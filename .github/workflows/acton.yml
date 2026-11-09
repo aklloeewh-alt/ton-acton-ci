@@ -14,6 +14,8 @@ jobs:
         uses: ton-blockchain/setup-acton@bb72b7a97df8c5203d6778ebaf773690990a09d0
       - name: Clone nominator-pool-v2
         run: git clone --depth 1 https://github.com/ton-blockchain/nominator-pool-v2 npv2
+      - name: Add our PoC test
+        run: cp poc/poc/poc_invariants.test.tolk npv2/tests/
       - name: Build+test nominator-pool-v2
         run: cd npv2 && acton up 1.2.0 && acton build && acton test
       - name: Clone acton-contracts
