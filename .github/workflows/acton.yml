@@ -21,8 +21,7 @@ jobs:
           (cd npv2 && acton up 1.2.0 && acton build && acton test) > /tmp/test.log 2>&1
           rc=$?
           if [ $rc -ne 0 ]; then
-            msg=$(tail -n 40 /tmp/test.log | tr '\n' ' ')
-            echo "::error::$msg"
+            { echo '```'; tail -n 100 /tmp/test.log; echo '```'; } >> $GITHUB_STEP_SUMMARY
           fi
           exit $rc
       - name: Clone acton-contracts
