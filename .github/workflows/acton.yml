@@ -16,8 +16,11 @@ jobs:
           export ACTON_NO_MODIFY_PATH=1
           sh /tmp/acton-installer.sh
           echo "$HOME/acton/bin" >> $GITHUB_PATH
+          echo "LD_LIBRARY_PATH=$HOME/acton/lib:${LD_LIBRARY_PATH}" >> $GITHUB_ENV
       - name: Acton version
-        run: acton --version
+        run: |
+          ls -la "$HOME/acton" "$HOME/acton/bin" || true
+          acton --version
       - name: Clone and test nominator-pool-v2
         run: |
           set -e
