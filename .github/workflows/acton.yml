@@ -18,7 +18,7 @@ jobs:
         run: cp poc/poc/poc_invariants.test.tolk npv2/tests/
       - name: Build+test nominator-pool-v2
         run: |
-          (cd npv2 && acton up 1.2.0 && acton build && acton test) > /tmp/test.log 2>&1
+          (cd npv2 && (for i in 1 2 3; do acton up 1.2.0 && break; echo retry \$i; sleep 10; done) && acton build && acton test) > /tmp/test.log 2>&1
           rc=$?
           if [ $rc -ne 0 ]; then
             { echo '```'; tail -n 100 /tmp/test.log; echo '```'; } >> $GITHUB_STEP_SUMMARY
@@ -27,7 +27,7 @@ jobs:
       - name: Clone acton-contracts
         run: git clone --depth 1 https://github.com/ton-blockchain/acton-contracts acton
       - name: Build acton-contracts
-        run: cd acton && acton up 1.2.0 && acton build
+        run: cd acton && (for i in 1 2 3; do acton up 1.2.0 && break; echo retry \$i; sleep 10; done) && acton build
       - name: Test jetton v2.1
         run: cd acton && acton test jetton-v2.1/tests
       - name: Test nft v1.1
@@ -35,4 +35,4 @@ jobs:
       - name: Clone tg-wallet
         run: git clone --depth 1 https://github.com/ton-blockchain/tg-wallet-contract tgw
       - name: Build+test tg-wallet
-        run: cd tgw && acton up 1.2.0 && acton build && acton test
+        run: cd tgw && (for i in 1 2 3; do acton up 1.2.0 && break; echo retry \$i; sleep 10; done) && acton build && acton test
