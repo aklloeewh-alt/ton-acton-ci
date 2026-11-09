@@ -14,6 +14,8 @@ jobs:
         uses: ton-blockchain/setup-acton@bb72b7a97df8c5203d6778ebaf773690990a09d0
       - name: Clone target
         run: git clone --depth 1 https://github.com/ton-blockchain/nominator-pool-v2 target
+      - name: Pin toolchain 1.2.0
+        run: cd target && acton up 1.2.0
       - name: Build
         run: cd target && acton build
       - name: Test
