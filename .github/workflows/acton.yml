@@ -12,11 +12,19 @@ jobs:
       - uses: actions/checkout@v4
       - name: Setup Acton
         uses: ton-blockchain/setup-acton@bb72b7a97df8c5203d6778ebaf773690990a09d0
-      - name: Clone target
-        run: git clone --depth 1 https://github.com/ton-blockchain/nominator-pool-v2 target
-      - name: Pin toolchain 1.2.0
-        run: cd target && acton up 1.2.0
-      - name: Build
-        run: cd target && acton build
-      - name: Test
-        run: cd target && acton test
+      - name: Clone nominator-pool-v2
+        run: git clone --depth 1 https://github.com/ton-blockchain/nominator-pool-v2 npv2
+      - name: Build+test nominator-pool-v2
+        run: cd npv2 && acton up 1.2.0 && acton build && acton test
+      - name: Clone acton-contracts
+        run: git clone --depth 1 https://github.com/ton-blockchain/acton-contracts acton
+      - name: Build acton-contracts
+        run: cd acton && acton up 1.2.0 && acton build
+      - name: Test jetton v2.1
+        run: cd acton && acton test jetton-v2.1/tests
+      - name: Test nft v1.1
+        run: cd acton && acton test nft-v1.1/tests
+      - name: Clone tg-wallet
+        run: git clone --depth 1 https://github.com/ton-blockchain/tg-wallet-contract tgw
+      - name: Build+test tg-wallet
+        run: cd tgw && acton up 1.2.0 && acton build && acton test
