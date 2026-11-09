@@ -17,7 +17,14 @@ jobs:
       - name: Add our PoC test
         run: cp poc/poc/poc_invariants.test.tolk npv2/tests/
       - name: Build+test nominator-pool-v2
-        run: cd npv2 && acton up 1.2.0 && acton build && acton test
+        run: |
+          (cd npv2 && acton up 1.2.0 && acton build && acton test) > /tmp/test.log 2>&1
+          rc=$?
+          if [ $rc -ne 0 ]; then
+            msg=$(tail -n 40 /tmp/test.log | tr '\n' ' ')
+            echo "::error::$msg"
+          fi
+          exit $rc
       - name: Clone acton-contracts
         run: git clone --depth 1 https://github.com/ton-blockchain/acton-contracts acton
       - name: Build acton-contracts
