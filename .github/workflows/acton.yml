@@ -1,0 +1,26 @@
+name: acton-tests
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Acton
+        run: |
+          set -e
+          curl -LsSf -o /tmp/acton-installer.sh https://github.com/ton-blockchain/acton/releases/latest/download/acton-installer.sh
+          export ACTON_UNMANAGED_INSTALL="$HOME/acton"
+          export ACTON_NO_MODIFY_PATH=1
+          sh /tmp/acton-installer.sh
+          echo "$HOME/acton/bin" >> $GITHUB_PATH
+      - name: Acton version
+        run: acton --version
+      - name: Clone and test nominator-pool-v2
+        run: |
+          set -e
+          git clone --depth 1 https://github.com/ton-blockchain/nominator-pool-v2 target
+          cd target
+          acton test
